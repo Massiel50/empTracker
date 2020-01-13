@@ -5,12 +5,11 @@ var connection = mysql.createConnection({
     host: "localhost",
     PORT: 3306,
     user: "root",
-    password: "",
-    database: ""
+    password: "Freaks505$",
+    database: "employee_tracker"
 });
 
 connection.connect(function(){
-    if(err) throw err;
     console.log("connection initiated");
 
     startQuery();
@@ -34,7 +33,7 @@ function startQuery(){
         }
     ]).then(function(response){
 
-        switch(response){
+        switch(response.selected){
             case  "View all employee's":
                 viewAllEmp();
                 break;
@@ -58,4 +57,33 @@ function startQuery(){
                 break;
         }
     })
+}
+
+function viewAllEmp(){
+    console.log("This responds")
+    connection.query( "SELECT first_name, last_name FROM employee_tracker.employee",
+        (err, results) =>{
+            if(err) throw err;
+            console.table(results);
+            startQuery();
+        })
+}
+
+function viewAllDept(){
+    inquirer.prompt([
+        {
+            type: "list",
+            message: "Which department would you like to search by?",
+            choices: ["sales", "other"],
+            name: "dept"
+        }
+    ]).then(function(response){
+        connection.query( "SELECT * FROM employee_tracker.department WHERE name =?", [response.dept],
+        (err, results) =>{
+            if(err) throw err;
+            console.table(results);
+            startQuery();
+        })
+    })
+    
 }
