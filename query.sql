@@ -37,3 +37,6 @@ values ("Melissa", "Smith");
 
 insert into department(name)
 values("sales");
+
+insert into department(name)
+values ("admin")

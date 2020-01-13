@@ -16,6 +16,14 @@ connection.connect(function(){
 })
 
 function startQuery(){
+// display the data in the DB
+// connection.query( "SELECT employee.first_name, employee.last_name, role.id FROM employee FULL OUTER JOIN role ON employee.id= role.id",
+// (err, results) =>{
+//     if(err) throw err;
+//     console.table(results);
+// })
+
+    // Start to ask what they want to do
     inquirer.prompt([
         {
             type: 'list',
@@ -81,9 +89,20 @@ function viewAllDept(){
         connection.query( "SELECT * FROM employee_tracker.department WHERE name =?", [response.dept],
         (err, results) =>{
             if(err) throw err;
-            console.table(results);
+            for (var i =0; i < results.length; i ++){
+                console.log(results[i].dept)
+                // startQuery();
+            }
             startQuery();
         })
     })
-    
+}
+
+function viewAllMangr(){
+    connection.query( "SELECT * FROM employee_tracker.department WHERE name =?", [response.dept],
+    (err, results) =>{
+        if(err) throw err;
+        console.table(results);
+        startQuery();
+    })
 }
