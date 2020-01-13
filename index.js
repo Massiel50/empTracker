@@ -9,5 +9,5 @@ var connection = mysql.createConnection(function(){
 });
 
 function startQuery(){
-
+    
 }
