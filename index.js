@@ -17,11 +17,12 @@ connection.connect(function(){
 
 function startQuery(){
 // display the data in the DB
-// connection.query( "SELECT employee.first_name, employee.last_name, role.id FROM employee FULL OUTER JOIN role ON employee.id= role.id",
-// (err, results) =>{
-//     if(err) throw err;
-//     console.table(results);
-// })
+connection.query( 
+"SELECT employee.first_name as employee_first, employee.last_name as employee_last, role.title, department.name as dept FROM employee JOIN role on role.id = employee.role_id JOIN department on role.department_id = department.id;",
+(err, results) =>{
+    if(err) throw err;
+    console.table(results + "\n");
+})
 
     // Start to ask what they want to do
     inquirer.prompt([
@@ -48,9 +49,9 @@ function startQuery(){
             case "View all employee's by dept":
                 viewAllDept();
                 break;
-            case "View all employee's by manager":
-                viewAllMangr();
-                break;
+            // case "View all employee's by manager":
+            //     viewAllMangr();
+            //     break;
             case "add employee":
                 addEmployee();
                 break;
@@ -60,9 +61,9 @@ function startQuery(){
             case "update employee role":
                 updEmplRole();
                 break;
-            case "update employee manager":
-                updEmplMangr();
-                break;
+            // case "update employee manager":
+            //     updEmplMangr();
+            //     break;
         }
     })
 }
@@ -86,7 +87,7 @@ function viewAllDept(){
             name: "dept"
         }
     ]).then(function(response){
-        connection.query( "SELECT * FROM employee_tracker.department WHERE name =?", [response.dept],
+        connection.query( "SELECT * FROM department_name WHERE name =?", [response.dept],
         (err, results) =>{
             if(err) throw err;
             for (var i =0; i < results.length; i ++){
@@ -98,11 +99,11 @@ function viewAllDept(){
     })
 }
 
-function viewAllMangr(){
-    connection.query( "SELECT * FROM employee_tracker.department WHERE name =?", [response.dept],
-    (err, results) =>{
-        if(err) throw err;
-        console.table(results);
-        startQuery();
-    })
-}
+// function viewAllMangr(){
+//     connection.query( "SELECT * FROM employee_tracker.department WHERE name =?", [response.dept],
+//     (err, results) =>{
+//         if(err) throw err;
+//         console.table(results);
+//         startQuery();
+//     })
+// }
