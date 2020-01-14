@@ -31,12 +31,11 @@ connection.query(
             message: 'Select an action',
             choices: [
                 "View all employee's", 
-                "View all employee's by dept", 
-                "View all employee's by manager", 
-                "add employee", 
-                "remove employee", 
-                "update employee role", 
-                "update employee manager",
+                "View all employee's by dept",
+                "Add employee", 
+                "Remove employee", 
+                "Update employee role", 
+                "Update employee manager",
                 ],
             name: "selected"
         }
@@ -49,9 +48,7 @@ connection.query(
             case "View all employee's by dept":
                 viewAllDept();
                 break;
-            // case "View all employee's by manager":
-            //     viewAllMangr();
-            //     break;
+           
             case "add employee":
                 addEmployee();
                 break;
@@ -61,9 +58,7 @@ connection.query(
             case "update employee role":
                 updEmplRole();
                 break;
-            // case "update employee manager":
-            //     updEmplMangr();
-            //     break;
+            
         }
     })
 }
@@ -92,14 +87,47 @@ function viewAllDept(){
             if(err) throw err;
             for (var i =0; i < results.length; i ++){
                 console.log(results[i].dept)
-                // startQuery();
+               
             }
             startQuery();
         })
     })
 }
 
-// function viewAllMangr(){
+function addEmployee(){
+    inquirer.prompt([{
+        type: "input",
+        message: "What is the employee's first name?",
+        name: "first_name"
+    },
+    {
+        type: "input",
+        message: "What is the employee's last name?",
+        name: "last_name"
+    },
+    {
+        type: "input",
+        message: "What role do you want to add employee to?",
+        name: "role_id"
+    }
+    {
+        type: "input",
+        message: "What department do you want to add employee to?",
+        name: "department_id"
+    }
+    ]).then(function(answers){
+        const {first_name, last_name, role_id, department_id} = answers;
+        var query = connection.query(
+            "INSERT INTO employee SET ?",
+              {
+                first_name: first_name,
+                last_name: last_name,
+                role_id: role_id,
+                department_id: department_id
+              },
+    )
+    }
+
 //     connection.query( "SELECT * FROM employee_tracker.department WHERE name =?", [response.dept],
 //     (err, results) =>{
 //         if(err) throw err;
