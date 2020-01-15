@@ -8,9 +8,7 @@ create table employee(
 	first_name VARCHAR(30),
 	last_name VARCHAR(30),
 	role_id INTEGER(10),
--- 	manager_id INTEGER(10),
 	foreign key(role_id) references role(id) on delete cascade
--- 	foreign key(manager_id) references employee(id) on delete cascade
 );
 
 create table role(
