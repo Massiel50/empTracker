@@ -61,7 +61,7 @@ function startQuery(){
         }
     })
 }
-
+// function that displays all employees name title salary & dept
 function viewAllEmp(){
     console.log("This responds")
     connection.query( "SELECT employee.first_name as employee_first, employee.last_name as employee_last, role.title, role.salary, department.name as dept FROM employee JOIN role on role.id = employee.role_id JOIN department on role.department_id = department.id",
@@ -93,73 +93,101 @@ function viewAllEmp(){
 //     })
 // }
 
-// function addEmployee(){
-//     inquirer.prompt([{
-//         type: "input",
-//         message: "What is the employee's first name?",
-//         name: "first_name"
-//     },
-//     {
-//         type: "input",
-//         message: "What is the employee's last name?",
-//         name: "last_name"
-//     },
-//     {
-//         type: "input",
-//         message: "What role do you want to add employee to?",
-//         name: "role_id"
-//     },
-//     {
-//         type: "input",
-//         message: "What department do you want to add employee to?",
-//         name: "department_id"
-//     }
-//     ]).then(function(answers){
-//         // const {first_name, last_name, role_id, department_id} = answers;
-//       let query = connection.query(
-//           "INSERT INTO employee SET ?",
-//           {
-//             first_name: answers.first_name,
-//             last_name: answers.last_name,
-//             role_id: answers.role_id,
-//             department_id: answers.department_id
-//           },
-//           function(err, res) {
-//             if (err) throw err;
-//             // Call updateProduct AFTER the INSERT completes
-//             startQuery();
-//           }
-//         );
+function addEmployee(){
+    inquirer.prompt([{
+        type: "input",
+        message: "What is the employee's first name?",
+        name: "first_name"
+    },
+    {
+        type: "input",
+        message: "What is the employee's last name?",
+        name: "last_name"
+    },
+    {
+        type: "input",
+        message: "What role do you want to add employee to?",
+        name: "role_id"
+    },
+    {
+        type: "input",
+        message: "What department do you want to add employee to?",
+        name: "department_id"
+    }
+    ]).then(function(answers){
+        // const {first_name, last_name, role_id, department_id} = answers;
+      let query = connection.query(
+          "INSERT INTO employee SET ?",
+          {
+            first_name: answers.first_name,
+            last_name: answers.last_name,
+            role_id: answers.role_id,
+            department_id: answers.department_id
+          },
+          function(err, res) {
+            if (err) throw err;
+            // Call updateProduct AFTER the INSERT completes
+            startQuery();
+          }
+        );
       
-//         // logs the actual query being run
-//         console.log(query.sql);
-//       }
+        // logs the actual query being run
+        console.log(query.sql);
+      }
 
 
-// //     connection.query( "SELECT * FROM employee_tracker.department WHERE name =?", [response.dept],
-// //     (err, results) =>{
-// //         if(err) throw err;
-// //         console.table(results);
-// //         startQuery();
-// //     })
-// // }
-//     )};
-
-// function remEmployee(){
-//     console.log("Deleting Employee...\n");
-//   connection.query(
-//     "DELETE FROM employee WHERE ?",
-//     {
-//         first_name: answers.first_name,
-//         last_name: answers.last_name,
-//         role_id: answers.role_id,
-//         department_id: answers.department_id
-//     },
-//     function(err, res) {
-//       if (err) throw err;
-//       console.log(res.affectedRows + " products deleted!\n");
-//       // Call readProducts AFTER the DELETE completes
-//       startQuery();
-//     }
-//   );
+//     connection.query( "SELECT * FROM employee_tracker.department WHERE name =?", [response.dept],
+//     (err, results) =>{
+//         if(err) throw err;
+//         console.table(results);
+//         startQuery();
+//     })
 // }
+    )};
+
+function remEmployee(){
+    connection.query( "SELECT first_name FROM employee", function(err, res) {
+        if(err) throw err;
+        console.log("selecting employee...");
+        inquirer.prompt([
+        
+            {
+                type: "list",
+                message: "Which employee do you want to delete?",
+                choices: function emplChoice(){
+                    let emplPool = [];
+                    console.log(res)
+                    for (var i = 0; i < res.length; i ++){
+                        emplPool.push(res[i].first_name);
+                    }
+                    return emplPool;
+                },
+                name: "employee"
+            }
+        ]).then(function(answers){
+        console.log("Deleting Employee...\n");
+  connection.query(
+    "DELETE FROM employee WHERE ?=",
+    {
+        first_name: answers.first_name,
+        last_name: answers.last_name,
+        role_id: answers.role_id,
+        department_id: answers.department_id
+    },
+    function(err, res) {
+      if (err) throw err;
+      console.log(res.affectedRows + " products deleted!\n");
+      // Call readProducts AFTER the DELETE completes
+      startQuery();
+    }
+  );
+
+                
+            })
+        // connection.end();
+    });
+}
+    
+    
+
+    
